@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: code-server
+  name: code-server
+  namespace: codeserver
+spec:
+  selector:
+    matchLabels:
+      app: code-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: code-server
+    spec:
+      serviceAccountName: codeserver-sa #if using service account
+      containers:
+      - image: codercom/code-server:latest
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: codeserver-files
+          mountPath: /config
+        name: code-server
+        env:
+        - name: PASSWORD
+          value: "password"
+      restartPolicy:  Always
+      volumes:
+        - name: codeserver-files
+          persistentVolumeClaim:
+            claimName: codeserverstore

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jupyter-notebook
+  namespace: jupyter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jupyter-notebook
+  template:
+    metadata:
+      labels:
+        app: jupyter-notebook
+    spec:
+      serviceAccountName: jupyter-sa #if using a service account
+      containers:
+      - name: jupyter-notebook
+        image: jupyter/base-notebook
+        volumeMounts:
+        - name: jupyter-files
+          mountPath: /config
+        ports:
+        - containerPort: 8888
+          protocol: TCP
+      restartPolicy:  Always
+      volumes:
+        - name: jupyter-files
+          persistentVolumeClaim:
+            claimName: jupyterstore

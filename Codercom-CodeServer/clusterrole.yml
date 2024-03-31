@@ -1,0 +1,8 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: codeserver-role
+rules:
+  - apiGroups: ["*"] #this will need tightening in the future
+    resources: ["*"] #this will need tightening in the future
+    verbs: ["*"]

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webtop
+  namespace: webtop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webtop
+  template:
+    metadata:
+      labels:
+        app: webtop
+    spec:
+      serviceAccountName: webtop-sa #if using service account
+      containers:
+      - name: webtop
+        image: lscr.io/linuxserver/webtop:ubuntu-kde #if using standard image 
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: webtop-files
+          mountPath: /config
+        ports:
+          - containerPort: 3000    
+        env:
+          - name: PUID
+            value: "1000"
+          - name: PGID
+            value: "1000"
+          - name: TZ
+            value: "Etc/UTC"
+      restartPolicy:  Always
+      volumes:
+        - name: webtop-files
+          persistentVolumeClaim:
+            claimName: webtopstore

@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: webtop-clusterrole-binding
+  namespace: webtop
+subjects:
+- kind: ServiceAccount
+  name: webtop-sa
+  namespace: webtop
+roleRef:
+  kind: ClusterRole
+  name: webtop-clusterrole
+  apiGroup: rbac.authorization.k8s.io
